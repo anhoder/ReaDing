@@ -1,0 +1,11 @@
+<view class="main">
+	<navigator wx:for="{{author_books}}" wx:key="this" url="/pages/bookinfo/bookinfo?book={{item._id}}" class="book">
+		<image src="https://statics.zhuishushenqi.com{{item.cover}}" lazy-load/>
+		<view class="book_info">
+			<text class="title">{{item.title}}</text>
+			<text class="author">作者：{{item.author}} | 类别：{{item.majorCate}}　{{item.minorCate}}</text>
+			<text class="intro">简介：{{item.shortIntro}}</text>
+			<view class="follower_outter">人气：<text class="follower_inner">{{item.latelyFollower}}</text></view>
+		</view>
+	</navigator>
+</view>

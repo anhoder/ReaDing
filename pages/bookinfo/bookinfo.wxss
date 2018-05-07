@@ -1,0 +1,170 @@
+.main{
+	height: 100%;
+	overflow-y: hidden;
+}
+.book_detail_box{
+	height: 35%;
+	border-bottom: 1px solid #ccc;
+	box-shadow: 0 0 10px #000;
+}
+.book_detail_box image{
+	width: 252rpx;
+	height: 360rpx;
+	margin: 25rpx;
+  	box-shadow: 0 0 10px #000;
+}
+.book_detail{
+	width: 55%;
+	float: right;
+	height: 100%;
+}
+.book_title{
+	font-size: 40rpx;
+    font-weight: bold;
+    display: block;
+    margin: 30rpx 0 15rpx 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.book_author_title{
+	font-size: 28rpx;
+    margin-bottom: 15rpx;
+}
+.book_author{
+	font-size: 28rpx;
+    color: #555;
+    display: inline;
+    font-style: italic;
+    text-decoration: underline;
+}
+.book_cate{
+	font-size: 28rpx;
+    display: block;
+    margin-bottom: 15rpx;
+}
+.rating_title{
+	font-size: 28rpx;
+	display: block;
+}
+.rating_score{
+	font-size: 60rpx;
+	display: block;
+	text-align: center;
+	color: #008B8B;
+}
+.rating_count{
+	font-size: 28rpx;
+	color: #888;
+	text-align: center;
+	display: block;
+}
+
+.other{
+	height: 55%;
+}
+.other_title{
+	border-left:5px solid #008B8B;
+	font-size: 40rpx;
+	height: 50rpx;
+	line-height: 50rpx;
+	padding-left: 20rpx;
+}
+
+.other_box{
+	margin-top: 20rpx;
+	border-bottom:1px solid #dddddd;
+}
+.other_content{
+	padding:15rpx 25rpx 30rpx 25rpx;
+	font-size: 30rpx;
+	color: #888;
+	line-height: 50rpx;
+}
+
+
+.book_source{
+	line-height: 80rpx;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.footer{
+	border-top: 1px solid #ccc;
+	height: 10%;
+}
+.button{
+	width: 33.333%;
+	height: 100%;	display: inline-block;
+	text-align: center;
+	line-height: 120rpx;
+	font-size: 36rpx;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.select_source{
+	background-color: white;
+	color: #008B8B;
+	border-right: 1px solid #ccc;
+}
+.add_to_mybooks{
+	background-color: white;
+	color: #008B8B;
+}
+.added{
+	color: #cccccc;
+}
+.start_read{
+	background-color: #008B8B;
+	color: white;
+}
+
+.related_book{
+  	margin: 38rpx;
+  	width:175rpx;
+  	display: inline-block;
+  	font-size: 30rpx;
+	color: #888;
+	line-height: 50rpx;
+}
+.related_book image{
+	height:250rpx;
+	width:175rpx;
+	box-shadow:0 0 10px #000;
+}
+.related_book_title{
+	text-align: center;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.reviews_title{
+	color: black;
+	font-size: 36rpx;
+	line-height: 80rpx;
+	text-align: center;
+	font-weight: bold;
+}
+.result_tips{
+	text-align: center;
+	line-height: 300rpx;
+}
+
+/*.show_all{
+  float: right;
+  margin-right: 20rpx;
+}
+.show_all image{
+  height: 30rpx;
+  width: 30rpx;
+  line-height: 50rpx;
+}
+.order{
+  float: right;
+  font-size: 30rpx;
+  color: #888;
+  margin-right: 20rpx;
+  line-height: 50rpx;
+}*/

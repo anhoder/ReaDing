@@ -1,0 +1,48 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/category/category",
+    "pages/rank/rank",
+    "pages/mybooks/mybooks",
+    "pages/bookinfo/bookinfo",
+    "pages/searchRes/searchRes",
+    "pages/authorbooks/authorbooks",
+    "pages/read/read",
+    "pages/rankdetail/rankdetail",
+    "pages/catedetail/catedetail"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#008B8B",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "阅鼑",
+    "backgroundColor": "#eeeeee",
+    "backgroundTextStyle": "light",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "list": [{
+      "pagePath": "pages/index/index",
+      "text": "首页",
+      "iconPath": "imgs/index.png",
+      "selectedIconPath": "imgs/index_selected.png"
+    },{
+      "pagePath": "pages/rank/rank",
+      "text": "排行榜",
+      "iconPath": "imgs/rank.png",
+      "selectedIconPath": "imgs/rank_selected.png"
+    },{
+      "pagePath": "pages/category/category",
+      "text": "分类",
+      "iconPath": "imgs/category.png",
+      "selectedIconPath": "imgs/category_selected.png"
+    },{
+      "pagePath": "pages/mybooks/mybooks",
+      "text": "我的书架",
+      "iconPath": "imgs/mybooks.png",
+      "selectedIconPath": "imgs/mybooks_selected.png"
+    }],
+    "color": "#707070",
+    "selectedColor": "#008B8B"
+  }
+
+}

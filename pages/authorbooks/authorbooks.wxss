@@ -1,0 +1,9 @@
+.main{
+	height: 100%;
+	width: 100%;
+	/*background: red;*/
+}
+.author_name{
+	font-size: 60rpx;
+	margin-left: 30rpx;
+}

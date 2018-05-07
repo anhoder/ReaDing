@@ -1,0 +1,39 @@
+page{
+  height: 100%;
+}
+.main{
+  height: 100%;
+}
+/*轮播图*/
+.swiper{
+  height: 300rpx;
+}
+.swiper image{
+  height: 300rpx;
+  width: 100%;
+}
+
+/*推荐*/
+.recommend{
+
+}
+.recommend_cat{
+  height: 70rpx;
+  display: flex;
+  width: 100%;
+  background: white;
+}
+.recommend_cat_fixed{
+  position: fixed;
+  top: 0;
+}
+.recommend_cat_selected{
+  color: #008B8B;
+  border-bottom: 2px solid #008B8B;
+}
+.recommend_cat view{
+  flex:1;
+  text-align:center;
+  line-height:70rpx;
+  font-size:30rpx;
+}

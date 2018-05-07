@@ -1,0 +1,23 @@
+.main{
+	height: 100%;
+	overflow-y: hidden;
+}
+.rank_title{
+	height: 150rpx;
+	border-bottom: 1px solid #ccc;
+	display: flex;
+	font-style: italic;
+}
+.rank_title image{
+	height: 100rpx;
+	width: 100rpx;
+	padding: 25rpx;
+}
+.rank_name{
+	height: 150rpx;
+	line-height: 150rpx;
+	font-size: 44rpx;
+}
+.rank_books{
+	height: 1180rpx;
+}

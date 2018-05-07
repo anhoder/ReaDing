@@ -1,0 +1,13 @@
+<view class="main">
+	<view class="sex_choose">
+		<view class="male {{male_select}}" bindtap="male_tap">男生</view>
+		<view class="female {{female_select}}" bindtap="female_tap">女生</view>
+		<view class="cover {{cover}}"></view>
+	</view>
+	<scroll-view class="rank_cate" scroll-y>
+		<navigator wx:for="{{show_rank_categories}}" wx:key="this" url="/pages/rankdetail/rankdetail?rank_id={{item._id}}" class="rank_item">
+			<image src="https://statics.zhuishushenqi.com{{item.cover}}" />
+			<view class="rank_title">{{item.title}}</view>
+		</navigator>
+	</scroll-view>
+</view>

@@ -1,0 +1,15 @@
+.main{
+	height: 100%;
+}
+.search{
+	flex:1;
+	height: 6%;
+}
+.search_result{
+	height: 94%;
+}
+.no_result{
+	text-align: center;
+	height: 600rpx;
+	line-height: 600rpx;
+}

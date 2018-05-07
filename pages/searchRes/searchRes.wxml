@@ -1,0 +1,22 @@
+<view class="main" bindtouchstart="removeTips">
+	<view class='search' data-id="search">
+		  <input class='search_input' data-id="search" type='text' placeholder="搜索" value="{{last_keyword}}" confirm-type="search" bindinput="autoComplete" bindconfirm="search"  bindfocus="autoComplete"/>
+		  <image class='search_button' src='/imgs/search_button.png' bindtap="search" data-id="search"/>
+		  <scroll-view class="{{auto_complete_box}}" wx:if="{{keywords.length>0}}" scroll-y data-id="search">
+		  	<view class="auto_complete_line" catchtap="selectedKeyword" data-index="{{index}}" wx:for="{{keywords}}" wx:key="this" data-id="search"><image src="/imgs/search.png"/><text>{{item}}</text></view>
+		  </scroll-view>
+	</view>
+	
+	<scroll-view class="search_result" scroll-y="{{scroll_sta}}" wx:if="{{search_result.length>0}}">
+		<navigator wx:for="{{search_result}}" wx:key="this" url="/pages/bookinfo/bookinfo?book={{item._id}}" class="book">
+			<image src="https://statics.zhuishushenqi.com{{item.cover}}" lazy-load/>
+			<view class="book_info">
+				<text class="title">{{item.title}}</text>
+				<text class="author">作者：{{item.author}} | 类别：{{item.cat}}</text>
+				<text class="intro">简介：{{item.shortIntro}}</text>
+				<view class="follower_outter">人气：<text class="follower_inner">{{item.latelyFollower}}</text></view>
+			</view>
+		</navigator>
+	</scroll-view>
+	<view class="no_result" wx:else >{{result_tips}}</view>
+</view>

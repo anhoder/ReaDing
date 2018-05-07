@@ -1,0 +1,34 @@
+<scroll-view class="main" scroll-y="{{scroll_sta}}" enable-back-to-top lower-threshold="200" bindscrolltolower="showMore" bindtouchstart="removeTips">
+	<!-- 搜索框 -->
+	<view class='{{search_style}}' data-id="search" >
+	  <input class='search_input' type='text' placeholder="搜索" value="{{last_keyword}}" confirm-type="search" bindinput="autoComplete" bindconfirm="search" bindfocus="autoComplete" data-id="search"/>
+	  <image class='search_button' src='/imgs/search_button.png' bindtap="search" data-id="search"/>
+	  <scroll-view class="{{auto_complete_box}}" wx:if="{{keywords.length>0}}" scroll-y data-id="search">
+	  	<view class="auto_complete_line" catchtap="selectedKeyword" data-index="{{index}}"  data-id="search" wx:for="{{keywords}}" wx:key="this"><image src="/imgs/search.png" /><text>{{item}}</text></view>
+	  </scroll-view>
+	</view>
+
+	<!-- 轮播图 -->
+	<swiper indicator-dots indicator-active-color="#008B8B" autoplay circular class="swiper">
+	  <swiper-item data-book="58c22cc09d980c254c263b1d" alt="叫我如何不想他" bindtap="toBookInfo"><image src='../../imgs/recommend1.jpg'/></swiper-item>
+	  <swiper-item data-book="56ce9d48363f92a00727392b" alt="重生之公主尊贵" bindtap="toBookInfo"><image src='../../imgs/recommend2.jpg'/></swiper-item>
+	  <swiper-item data-book="574febe4022225483f665d95" alt="匣心记" bindtap="toBookInfo"><image src='../../imgs/recommend3.jpg'/></swiper-item>  
+	</swiper>
+
+	<!-- 推荐书 -->
+	<view class="recommend">
+		<view class="{{recommend_cat_style}}">
+			<view class="{{recommend_cat_selected[0]}}" bindtap="selectMale">男生Top100</view>
+			<view class="{{recommend_cat_selected[1]}}" bindtap="selectFemale">女生Top100</view>
+		</view>
+		<navigator wx:for="{{now_rank.books}}" wx:key="this" wx:if="{{index<show_num*10}}" url="/pages/bookinfo/bookinfo?book={{item._id}}" class="book">
+			<image src="https://statics.zhuishushenqi.com{{item.cover}}" lazy-load/>
+			<view class="book_info">
+				<text class="title">{{item.title}}</text>
+				<text class="author">作者：{{item.author}}　|　类别：{{item.majorCate}}　{{item.minorCate}}</text>
+				<text class="intro">简介：{{item.shortIntro}}</text>
+				<view class="follower_outter">人气：<text class="follower_inner">{{item.latelyFollower}}</text></view>
+			</view>
+		</navigator>
+	</view>
+</scroll-view>

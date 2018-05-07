@@ -1,0 +1,24 @@
+<view class="main">
+	<view class="sex_choose">
+		<view class="male {{male_select}}" bindtap="male_tap">男生</view>
+		<view class="female {{female_select}}" bindtap="female_tap">女生</view>
+		<view class="press {{press_select}}" bindtap="press_tap">出版</view>
+		<view class="cover {{cover}}"></view>
+	</view>
+
+	<view class="cat">
+		<scroll-view class="cates" scroll-y>
+			<view class="cat_cover" style="top:{{top}}rpx;">{{cat_name}}</view>
+			<view wx:for="{{show_cats}}" wx:key="this" data-index="{{index}}" class="cat_item" bindtap="showSubCats">
+				{{item.major}}
+			</view>
+
+		</scroll-view>
+		<scroll-view class="subCates" scroll-y>
+			<view class="sub_item" data-name="" bindtap="toCatInfo">全部</view>
+			<view wx:for="{{sub_cats}}" wx:key="this" data-name="{{item}}" class="sub_item" bindtap="toCatInfo">
+				{{item}}
+			</view>
+		</scroll-view>
+	</view>
+</view>

@@ -1,0 +1,17 @@
+<view class="main">
+	<view class="rank_title">
+		<image src="https://statics.zhuishushenqi.com{{rank_info.cover}}" />
+		<view class="rank_name">{{rank_info.title}}</view>
+	</view>
+	<scroll-view class="rank_books" scroll-y bindscrolltolower="showMore">
+		<navigator wx:for="{{rank_info.books}}" wx:key="this" wx:if="{{index<show_num*10}}" url="/pages/bookinfo/bookinfo?book={{item._id}}" class="book">
+			<image src="https://statics.zhuishushenqi.com{{item.cover}}" lazy-load/>
+			<view class="book_info">
+				<text class="title">{{item.title}}</text>
+				<text class="author">作者：{{item.author}}　|　类别：{{item.majorCate}}　{{item.minorCate}}</text>
+				<text class="intro">简介：{{item.shortIntro}}</text>
+				<view class="follower_outter">人气：<text class="follower_inner">{{item.latelyFollower}}</text></view>
+			</view>
+		</navigator>
+	</scroll-view>
+</view>
