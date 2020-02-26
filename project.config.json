@@ -10,8 +10,10 @@
 	"compileType": "miniprogram",
 	"libVersion": "1.9.91",
 	"appid": "wx3406c0e417fb4256",
-	"projectname": "%E9%98%85%E9%BC%8E",
+	"projectname": "ReaDing",
 	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
