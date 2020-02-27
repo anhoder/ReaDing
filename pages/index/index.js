@@ -1,4 +1,8 @@
+import IndexRequest from '../../requests/IndexRequest.js';
+
 var app = getApp();
+var request = new IndexRequest();
+
 Page({
 	data: {
 		scroll_sta: true,
@@ -38,83 +42,62 @@ Page({
 			"title": "加载中...",
 			"duration": 20000
 		});
-		var that = this;
 
-    // 获取Token
-    wx.request({
-      url: app.globalData.config.user.token.concat("?version=1&vercode=1&brand=apple&device=iPhone11,6&serial=13.3.1"),
-      header: {
-        packge: "quanminxiaoshuo",
-        pt: "ios",
-        ver: "5.0"
-      },
-      method: "POST",
-      success: function (res) {
+    var user = wx.getStorageSync('user');
+    
+    if (!user) {
+      var that = this;
+      // 获取Token
+      request.getToken(res => {
         var userInfo = {
-          token: res.data.data.token
+          token: res.data.data.token,
+          userId: res.data.data.user_id
         };
-        that.setData({request_flag: ++that.data.request_flag, ...userInfo});
+        that.setData({ request_flag: ++that.data.request_flag, ...userInfo });
         wx.setStorage({
           key: 'user',
           data: userInfo,
         });
-        that.getRandomBooks(1);
-        that.getRandomBooks(2);
-        that.getBanner();
+        that.getRandomBooks(1, 4);
+        that.getRandomBooks(2, 4);
+        that.getBanner(4);
         if (that.data.request_flag == 4) wx.hideLoading();
-      },
-      fail: function () {
+      }, () => {
         wx.hideLoading();
         wx.showModal({
           title: "网络错误，请稍后再试"
         });
-      }
-    });
-		
+      });
+    } else {
+      this.setData(user);
+      this.getRandomBooks(1, 3);
+      this.getRandomBooks(2, 3);
+      this.getBanner(3);
+    }
 	},
+
 
   /**
    * 获取Banner图
    */
-  getBanner: function () {
+  getBanner: function (times) {
     var that = this;
-    wx.request({
-      url: app.globalData.config.book_list.banner.concat("?sex=0"),
-      header: {
-        ver: "5.0",
-        pt: "ios",
-        packge: "quanminxiaoshuo",
-        token: that.data.token,
-        user: that.data.userId
-      },
-      success: function (res) {
+    request.getBanner({token: this.data.token, userId: this.data.userId}, res => {
         that.setData({ banner: res.data.data.banner, request_flag: ++that.data.request_flag });
-        if (that.data.request_flag == 4) wx.hideLoading();
-      },
-      fail: function () {
+        if (that.data.request_flag >= times) wx.hideLoading();
+      }, () => {
         wx.hideLoading();
-        wx.showModal({
-          title: "网络错误，请稍后再试"
-        });
-      }
-    })
+        wx.showModal({title: "网络错误，请稍后再试"});
+      });
   },
+
 
   /**
    * 获取随机书
    */
-  getRandomBooks: function(maleType = 1) {
+  getRandomBooks: function(maleType = 1, times) {
     var that = this;
-    wx.request({
-      url: app.globalData.config.book_list.random.concat("?sex=", maleType, "&category=choice"),
-      header: {
-        ver: "5.0",
-        pt: "ios",
-        packge: "quanminxiaoshuo",
-        token: that.data.token,
-        user: that.data.userId
-      },
-      success: function (res) {
+    request.getRandomBooks(maleType, {token: this.data.token, userId: this.data.userId}, res => {
         if (maleType == 1) {
           var data = {
             male_rank: that.data.male_rank.concat(res.data.data),
@@ -140,17 +123,18 @@ Page({
           }
           that.setData(data);
         }
-        if (that.data.request_flag == 4) wx.hideLoading();
-      },
-      fail: function () {
+        if (that.data.request_flag >= times) wx.hideLoading();
+      }, () => {
         wx.hideLoading();
-        wx.showModal({
-          title: "网络错误，请稍后再试"
-        });
+        wx.showModal({title: "网络错误，请稍后再试"});
       }
-    })
+    );
   },
 
+
+  /**
+   * 跳转到书籍详情
+   */
 	toBookInfo: function(event){
 		// console.log(event.currentTarget.dataset.book);
 		var book = event.currentTarget.dataset.book;
@@ -159,6 +143,10 @@ Page({
 		});
 	},
 
+
+  /**
+   * 搜索自动补全
+   */
 	autoComplete: function(event){
 		var that = this;
 		that.setData({
@@ -166,29 +154,42 @@ Page({
 		});
 		var key = encodeURI(event.detail.value);
 		if(key == "") {
-			that.setData({
-				keywords: {}
-			});
-		}
-		wx.request({
-			url: app.globalData.config.book.book_autocomplete + "?query=" + key,
-			success: function(res){
-				if(res.data.keywords.length>5){
-					that.setData({
-						keywords: res.data.keywords,
-						auto_complete_box: "auto_complete_box auto_complete_box_height"
-					});
-				}else{
-					that.setData({
-						keywords: res.data.keywords,
-						auto_complete_box: "auto_complete_box"
-					});
-				}
-				
-			}
-		});
+      request.getHotWords({token: this.data.token, userId: this.data.userId}, res => {
+          that.setData({
+            keywords: res.data.data,
+            auto_complete_box: "auto_complete_box auto_complete_box_height"
+          });
+        }, () => {
+          wx.hideLoading();
+          wx.showModal({title: "网络错误，请稍后再试"});
+        }
+      );
+		} else {
+      request.getAutoComplete(key, {token: this.data.token, userId: this.data.userId}, res => {
+          var words = res.data.data.map(item => item.name);
+          if (words.length > 5) {
+            that.setData({
+              keywords: words,
+              auto_complete_box: "auto_complete_box auto_complete_box_height"
+            });
+          } else {
+            that.setData({
+              keywords: words,
+              auto_complete_box: "auto_complete_box"
+            });
+          }
+        }, () => {
+          wx.hideLoading();
+          wx.showModal({ title: "网络错误，请稍后再试" });
+        }
+      );
+    }
 	},
 
+
+  /**
+   * 选择词条
+   */
 	selectedKeyword: function(event){
 		var keyword_index = event.currentTarget.dataset.index;
 		this.setData({
@@ -199,6 +200,10 @@ Page({
 		});
 	},
 
+
+  /**
+   * 点击搜索按钮
+   */
 	search: function(){
 		var keyword = this.data.keyword;
 		if(keyword != "") {
@@ -208,6 +213,10 @@ Page({
 		}
 	},
 
+
+  /**
+   * 移除搜索提示
+   */
 	removeTips: function(event){
 		if(event.target.dataset.id != "search"){
 			this.setData({
@@ -235,6 +244,10 @@ Page({
 	// 	}
 	// },
 
+
+  /**
+   * 选择男生
+   */
 	selectMale: function(){
 		if(this.data.recommend_cat_selected_flag != 1){
 			this.setData({
@@ -249,6 +262,10 @@ Page({
 
 	},
 
+
+  /**
+   * 选择女生
+   */
 	selectFemale: function(){
 		if(this.data.recommend_cat_selected_flag != 2){
 			this.setData({
@@ -263,6 +280,10 @@ Page({
 
 	},
 
+
+  /**
+   * 下拉更多
+   */
 	showMore: function(){
     this.getRandomBooks(this.data.recommend_cat_selected_flag);
     this.setData({
@@ -270,6 +291,10 @@ Page({
     });
 	},
 
+
+  /**
+   * 转发
+   */
 	onShareAppMessage: function(){
   		return {
       		title: '阅鼑(Reading)',

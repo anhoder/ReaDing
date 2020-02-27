@@ -1,55 +1,58 @@
 <view class="main">
 	<view class="book_detail_box">
-		<image src="https://statics.zhuishushenqi.com{{book_info.cover}}" lazy-load/>
+		<image src="{{book_info.image}}" lazy-load/>
 		<view class="book_detail">
-			<text class="book_title">{{book_info.title}}</text>
+			<text class="book_title">{{book_info.name}}</text>
 			<view class="book_author_title">作者：<navigator url="/pages/authorbooks/authorbooks?author={{book_info.author}}" class="book_author">{{book_info.author}}</navigator></view>
-			<text class="book_cate">类别：{{book_info.majorCate}}　{{book_info.minorCate}}</text>
-			<view class="rating_title">评分：
-				<text class="rating_score" wx:if="{{book_info.rating.score}}">{{book_info.rating.score}}</text>
-				<text class="rating_count" wx:if="{{book_info.rating.count}}">({{book_info.rating.count}}人参评)</text>
-				<text wx:else>暂无评分</text>
+			<text class="book_cate">类别：{{book_info.ltype}}　{{book_info.stype}}</text>
+			<view class="rating_title">喜欢人数：
+				<text class="rating_score" wx:if="{{book_info.rating.score}}">{{book_info.fav_num}}</text>
+				<text wx:else>没人喜欢T^T</text>
 			</view>
 		</view>
 	</view>
 	<scroll-view class="other" scroll-y>
 		<view class="other_box">
 			<view class="other_title">简　介</view>
-			<view class="other_content" wx:if="{{book_info.longIntro}}">{{book_info.longIntro}}</view>
+			<view class="other_content" wx:if="{{book_info.longIntro}}">{{book_info.remark}}</view>
 			<view class="other_content" wx:else>暂无简介</view>
 		</view>
 		<view class="other_box">
 			<view class="other_title">书源及最新章节</view>
 			<view class="other_content">
-				<view class="book_source" wx:for="{{book_source_info}}" wx:key="this"><text style="color:black;">{{item.name}}</text>：{{item.lastChapter}}</view>
+				<view class="book_source" wx:for="{{book_source_info}}" wx:key="this"><text style="color:black;">{{item.site_name}}</text>：{{item.last_chapter_name}}</view>
 			</view>
 		</view>
 		<view class="other_box">
-			<view class="other_title">相关书籍<text style="color:#cccccc;font-size:24rpx;">　(左滑更多)</text></view>
+			<view class="other_title">作者书籍<text style="color:#cccccc;font-size:24rpx;"></text></view>
 			<scroll-view scroll-x>
-				<view style="width:{{250*related_books.length}}rpx;">
-					<navigator url="/pages/bookinfo/bookinfo?book={{item._id}}" class="related_book" wx:for="{{related_books}}" wx:key="this"> 
-						<image src="https://statics.zhuishushenqi.com{{item.cover}}" />
-						<view class="related_book_title">{{item.title}}</view>
+				<view style="width:{{250*related_books.length}}rpx;" wx:if="{{author_books.length>0}}">
+					<navigator url="/pages/bookinfo/bookinfo?book={{item.book_id}}" class="related_book" wx:for="{{author_books}}" wx:key="this"> 
+						<image src="{{item.image}}" />
+						<view class="related_book_title">{{item.name}}</view>
 					</navigator>
 				</view>
+			  <view wx:else class="result_tips">暂无其他书籍</view>
 			</scroll-view>
 		</view>
 		<view class="other_box">
-			<view class="other_title">热门书评Top10</view>
+			<view class="other_title">热门评论</view>
 			<view wx:if="{{book_reviews.length>0}}">
-				<view class="other_content" style="border-bottom:1px solid #dddddd" wx:for="{{book_reviews}}" wx:key="this">
-					<view class="reviews_title">{{item.title}}</view>
-					<view class="reviews_content">{{item.content}}</view>
+				<view class="other_content" style="border-bottom:1px solid #dddddd;display:flex;text-align: center;" wx:for="{{book_reviews}}" wx:key="this">
+          <view style="flex: 2">
+            <view><image src="{{item.avatar}}" class="avatar" /></view>
+            <view class="reviews_title">{{item.nick}}</view>
+          </view>
+					<view class="reviews_content" style="flex: 8">{{item.content}}</view>
 				</view>
 			</view>
-			<view wx:else class="result_tips" >暂无书评</view>
+			<view wx:else class="result_tips" >暂无评论</view>
 		</view>
 	</scroll-view>
 
 	<view class="footer">
 		<picker class="button" value="{{index}}" range="{{source_temp}}" bindchange="changeSource">
-	    	<view class="select_source">{{index<0?"选择书源":source_temp[index]}}</view>
+	    	<view class="select_source">{{index<0 ? "选择书源" : source_temp[index]}}</view>
   		</picker>
 		<view class="button {{add_to_mybooks_style}}" bindtap="{{add_fun}}">{{add_book_stat}}</view>
 		<view class="button start_read" bindtap="startRead">开始阅读</view>

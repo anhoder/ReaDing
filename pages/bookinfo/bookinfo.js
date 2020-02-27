@@ -7,123 +7,65 @@
 * @Last Modified time: 2018-02-24 09:26:52
 * @Comment:
 */
+import BookRequest from '../../requests/BookRequest.js';
+
+var bookRequest = new BookRequest();
 var app = getApp();
+
 Page({
 	data:{
 		book_info: {},
-		book_source_info:{},
-		related_books: {},
-		book_reviews: {},
+		book_source_info: [], // 书源
+		author_books: [],   // 作者其他书籍
+		book_reviews: {},   // 评论
 		// select_source_tips: "选择书源",
-		source_temp: new Array(),
+		source_temp: [],
 		index: -1,
 		source_id: "",
-		mybooks: new Array(),
+		mybooks: [],
 		add_book_stat: "加入书架",
 		add_to_mybooks_style: "add_to_mybooks",
 		add_fun: "addToMybooks",
 		get_data_flag: 0
 	},
+
+
 	onLoad: function(opt){
 		wx.showLoading({
 			"title": "加载中...",
 			"duration": 20000
 		});
 		var that = this;
-		var book_id = opt.book;
-		var url = app.globalData.config.book.book_info+"/"+book_id;
-		wx.request({
-			url: url,
-			success: function(res){
-				that.setData({
-					book_info: res.data
-				});
-				that.getBookSource(res.data._id);
-				that.getRelatedBooks(res.data._id);
-				that.getBookReviews(res.data._id);
-			},
-			fail: function(){
-				wx.hideLoading();
-				wx.showModal({
-					title: "网络错误，请稍后再试"
-				});
-			}
+    var bookId = opt.book;
 
-		});
+    var userInfo = wx.getStorageSync('user');
+    this.setData({token: userInfo.token, userId: userInfo.userId});
+
+    bookRequest.getBookInfo(bookId, userInfo, res => {
+        that.setData({
+          book_info: res.data.data,
+          book_source_info: res.data.data.sites,
+          author_books: res.data.data.author_book_list,
+          book_reviews: res.data.data.comment_info_list,
+          source_temp: res.data.data.sites.map(item => item.site_name)
+        });
+        wx.hideLoading();
+      }, () => {
+        wx.hideLoading();
+        wx.showModal({
+          title: "网络错误，请稍后再试"
+        });
+      } 
+    );
 	},
-	getBookSource: function(book){
-		var that = this;
-		var url = app.globalData.config.book.book_sources+"?view=summary&book="+book;
-		wx.request({
-			url: url,
-			success: function(res){
-				var temp = new Array();
-				for(var i=0; i<res.data.length; i++){
-					temp[i] = res.data[i].name;
-				}
-				that.setData({
-					book_source_info: res.data,
-					get_data_flag: that.data.get_data_flag+1,
-					source_temp: temp
-				});
-				if(that.data.get_data_flag == 4) wx.hideLoading();
-				// console.log(that.data.book_source_info);
-				that.getMyBooks();
-			},
-			fail: function(){
-				wx.hideLoading();
-				wx.showModal({
-					title: "网络错误，请稍后再试"
-				});
-			}
-		});
-	},
-	getRelatedBooks: function(book){
-		var that = this;
-		var url = app.globalData.config.book.recommend_books+"/"+book+"/recommend";
-		wx.request({
-			url: url,
-			success: function(res){
-				that.setData({
-					related_books: res.data.books,
-					get_data_flag: that.data.get_data_flag+1
-				});
-				if(that.data.get_data_flag == 4) wx.hideLoading();
-				// console.log(that.data.related_books);
-			},
-			fail: function(){
-				wx.hideLoading();
-				wx.showModal({
-					title: "网络错误，请稍后再试"
-				});
-			}
-		});
-	},
-	getBookReviews: function(book){
-		var that = this;
-		var url = app.globalData.config.comment.book_reviews+"?book="+book+"&sort=comment-count&start=0&limit=10";
-		wx.request({
-			url: url,
-			success: function(res){
-				that.setData({
-					book_reviews: res.data.reviews,
-					get_data_flag: that.data.get_data_flag+1
-				});
-				if(that.data.get_data_flag == 4) wx.hideLoading();
-				// console.log(that.data.book_reviews);
-			},
-			fail: function(){
-				wx.hideLoading();
-				wx.showModal({
-					title: "网络错误，请稍后再试"
-				});
-			}
-		});
-	},
+
+  /**
+   * 获取本地书架信息
+   */
 	getMyBooks: function(){
-		var book_id = this.data.book_info._id;
+		var book_id = this.data.book_info.book_id;
 		var mybooks = wx.getStorageSync("mybooks");
-		mybooks = mybooks?mybooks:new Array();
+		mybooks = mybooks ? mybooks : [];
 		this.setData({
 			mybooks: mybooks,
 			get_data_flag: this.data.get_data_flag+1
@@ -143,13 +85,22 @@ Page({
 			});
 		}
 	},
+
+
+  /**
+   * 改变书源
+   */
 	changeSource: function(event){
 		var index = event.detail.value;
 		this.setData({
 			index: index,
-			source_id: this.data.book_source_info[index]._id
+      source_id: this.data.book_source_info[index].crawl_book_id
 		});
 	},
+
+  /**
+   * 添加到书架
+   */
 	addToMybooks: function(event){
 		if(this.data.source_id == "") {
 			wx.showToast({
@@ -188,6 +139,10 @@ Page({
 			}
 		}
 	},
+
+  /**
+   * 移出书架
+   */
 	removeBook: function(event){
 		wx.showToast({
 			title: '请前往"书架"移除',
@@ -234,6 +189,10 @@ Page({
 		//   }
 		// });
 	},
+
+  /**
+   * 开始阅读
+   */
 	startRead: function(event){
 		if(this.data.source_id == "") {
 			wx.showToast({
@@ -246,6 +205,10 @@ Page({
 			});
 		}
 	},
+
+  /**
+   * 是否在我的书架
+   */
 	isInMybooks: function(arr,value){
 		var len = arr.length;
 	    for(var i = 0; i < len; i++){
@@ -255,6 +218,8 @@ Page({
 	    }
 	    return -1;
 	},
+
+
 	indexOfSource: function(arr, value){
 		var len = arr.length;
 	    for(var i = 0; i < len; i++){

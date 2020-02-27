@@ -1,4 +1,4 @@
-<scroll-view class="main" scroll-y="{{scroll_sta}}" enable-back-to-top lower-threshold="100" bindscrolltolower="showMore" bindtouchstart="removeTips">
+<scroll-view class="main" scroll-y="{{scroll_sta}}" enable-back-to-top lower-threshold="150" bindscrolltolower="showMore" bindtouchstart="removeTips">
 	<!-- 搜索框 -->
 	<view class='{{search_style}}' data-id="search" >
 	  <input class='search_input' type='text' placeholder="搜索" value="{{last_keyword}}" confirm-type="search" bindinput="autoComplete" bindconfirm="search" bindfocus="autoComplete" data-id="search"/>
@@ -16,8 +16,8 @@
 	<!-- 推荐书 -->
 	<view class="recommend">
 		<view class="{{recommend_cat_style}}">
-			<view class="{{recommend_cat_selected[0]}}" bindtap="selectMale">男生Top100</view>
-			<view class="{{recommend_cat_selected[1]}}" bindtap="selectFemale">女生Top100</view>
+			<view class="{{recommend_cat_selected[0]}}" bindtap="selectMale">男生推荐</view>
+			<view class="{{recommend_cat_selected[1]}}" bindtap="selectFemale">女生推荐</view>
 		</view>
 		<navigator wx:for="{{now_rank}}" wx:key="this" wx:if="{{index<show_num*4}}" url="/pages/bookinfo/bookinfo?book={{item.book_id}}" class="book">
 			<image src="{{item.image}}" lazy-load/>

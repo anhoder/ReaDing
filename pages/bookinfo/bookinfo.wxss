@@ -76,7 +76,7 @@
 	border-bottom:1px solid #dddddd;
 }
 .other_content{
-	padding:15rpx 25rpx 30rpx 25rpx;
+	padding:40rpx 25rpx 30rpx 25rpx;
 	font-size: 30rpx;
 	color: #888;
 	line-height: 50rpx;
@@ -142,16 +142,22 @@
 }
 .reviews_title{
 	color: black;
-	font-size: 36rpx;
-	line-height: 80rpx;
-	text-align: center;
-	font-weight: bold;
+	font-size: 20rpx;
 }
 .result_tips{
 	text-align: center;
 	line-height: 300rpx;
 }
-
+.avatar{
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-left: 20rpx;
+}
+.reviews_content{
+  text-align: left;
+  color: "#ccc";
+}
 /*.show_all{
   float: right;
   margin-right: 20rpx;

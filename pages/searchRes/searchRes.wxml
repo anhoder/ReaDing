@@ -7,14 +7,14 @@
 		  </scroll-view>
 	</view>
 	
-	<scroll-view class="search_result" scroll-y="{{scroll_sta}}" wx:if="{{search_result.length>0}}">
-		<navigator wx:for="{{search_result}}" wx:key="this" url="/pages/bookinfo/bookinfo?book={{item._id}}" class="book">
-			<image src="https://statics.zhuishushenqi.com{{item.cover}}" lazy-load/>
+	<scroll-view class="search_result" scroll-y="{{scroll_sta}}" wx:if="{{search_result.length>0}}" bindscrolltolower="nextPage" lower-threshold="150">
+		<navigator wx:for="{{search_result}}" wx:key="this" url="/pages/bookinfo/bookinfo?book={{item.book_id}}" class="book">
+			<image src="{{item.image}}" lazy-load/>
 			<view class="book_info">
-				<text class="title">{{item.title}}</text>
-				<text class="author">作者：{{item.author}} | 类别：{{item.cat}}</text>
-				<text class="intro">简介：{{item.shortIntro}}</text>
-				<view class="follower_outter">人气：<text class="follower_inner">{{item.latelyFollower}}</text></view>
+				<text class="title">{{item.name}}</text>
+				<text class="author">作者：{{item.author}} | 类别：{{item.ltype}}　{{item.stype}}</text>
+				<text class="intro">简介：{{item.remark}}</text>
+				<view class="follower_outter"><text class="follower_inner">{{item.last_chapter}}</text></view>
 			</view>
 		</navigator>
 	</scroll-view>
