@@ -1,11 +1,10 @@
 <view  class="main main_font_style_{{button_select[1]+button_select[2]*2}}">
 	<scroll-view class="chapter_content" scroll-y bindscroll="setReadingProcess" bindtap="changeCover" scroll-with-animation="true" scroll-top="{{start_reading_process}}">
 		<view class="title"><text>{{chapter_title}}</text></view>
-		<view class="body body_font_size_{{font_size}} body_font_size_{{font_size*3+line_height}}_line_height"><text style="width:100%;">{{chapter_content.body}}</text></view>
-		<view class="body body_font_size_{{font_size}} body_font_size_{{font_size*3+line_height}}_line_height"><text style="width:100%;">{{chapter_content.cpContent}}</text></view>
+		<view class="body body_font_size_{{font_size}} body_font_size_{{font_size*3+line_height}}_line_height"><text style="width:100%;">{{chapter_content}}</text></view>
 		<view class="jump_chapter" style="opacity:{{opacity}};">
 			<view class="pre_chapter {{reading_chapter?'enabled':'disabled'}}" catchtap="{{reading_chapter?'toPreChapter':'setPreButtonDisabled'}}">上一章</view>
-			<view class="next_chapter {{reading_chapter==book_chapters.chapters.length-1?'disabled':'enabled'}}" catchtap="{{reading_chapter==book_chapters.chapters.length-1?'setNextButtonDisabled':'toNextChapter'}}">下一章</view>
+			<view class="next_chapter {{reading_chapter == book_chapters.length-1?'disabled':'enabled'}}" catchtap="{{reading_chapter==book_chapters.length-1?'setNextButtonDisabled':'toNextChapter'}}">下一章</view>
 		</view>
 	</scroll-view>
 	<view class="cover {{cover_style}}">
@@ -23,7 +22,7 @@
 			<view class="button {{line_height==2?'button_disabled':'button_enabled'}}" bindtap="{{line_height==2?'none':'line_height_add'}}">行距+</view>
 		</view>
 		<view class="read_style">
-			<picker range="{{book_source_info}}" range-key="name" value="{{index_source}}" class="button" bindchange="changeSource">换源</picker>
+			<picker range="{{book_source_info}}" range-key="site_name" value="{{index_source}}" class="button" bindchange="changeSource">换源</picker>
 			<view class="button" bindtap="showChapters">目录</view>
 			<view class="button" bindtap="toBookInfo">详情</view>
 		</view>
@@ -33,7 +32,7 @@
 		<view class="chapters_content">
 		<scroll-view style="height:100%;" scroll-y scroll-into-view="chapter{{to_reading_chapter-5}}" scroll-with-animation>
 			<!-- <view> -->
-				<view class="chapter {{index==reading_chapter?'chapter_select':''}}" wx:for="{{book_chapters.chapters}}" wx:key="this" data-index="{{index}}" bindtap="toObjChapter" id="chapter{{index}}">{{item.title}}</view>
+				<view class="chapter {{index==reading_chapter?'chapter_select':''}}" wx:for="{{book_chapters}}" wx:key="this" data-index="{{index}}" bindtap="toObjChapter" id="chapter{{index}}">{{item.name}}</view>
 			<!-- </view> -->
 		</scroll-view>
 		</view>

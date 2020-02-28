@@ -19,7 +19,6 @@ Page({
 		author_books: [],   // 作者其他书籍
 		book_reviews: {},   // 评论
 		// select_source_tips: "选择书源",
-		source_temp: [],
 		index: -1,
 		source_id: "",
 		mybooks: [],
@@ -47,9 +46,10 @@ Page({
           book_source_info: res.data.data.sites,
           author_books: res.data.data.author_book_list,
           book_reviews: res.data.data.comment_info_list,
-          source_temp: res.data.data.sites.map(item => item.site_name)
+          get_data_flag: that.data.get_data_flag + 1
         });
-        wx.hideLoading();
+        this.getMyBooks();
+		    if(this.data.get_data_flag == 2) wx.hideLoading();
       }, () => {
         wx.hideLoading();
         wx.showModal({
@@ -58,6 +58,7 @@ Page({
       } 
     );
 	},
+
 
   /**
    * 获取本地书架信息
@@ -70,12 +71,11 @@ Page({
 			mybooks: mybooks,
 			get_data_flag: this.data.get_data_flag+1
 		});
-		if(this.data.get_data_flag == 4) wx.hideLoading();
-		if(this.isInMybooks(this.data.mybooks,book_id) != -1){
-			var index = this.isInMybooks(this.data.mybooks,book_id);
+		if(this.data.get_data_flag == 2) wx.hideLoading();
+		if(this.isInMybooks(mybooks,book_id) != -1){
+			var index = this.isInMybooks(mybooks, book_id);
 			var source_id = this.data.mybooks[index].source_id;
 			var source_index = this.indexOfSource(this.data.book_source_info, source_id);
-			// console.log(source_index,);
 			this.setData({
 				index: source_index,
 				source_id: source_id,
@@ -94,9 +94,10 @@ Page({
 		var index = event.detail.value;
 		this.setData({
 			index: index,
-      source_id: this.data.book_source_info[index].crawl_book_id
+      source_id: this.data.book_source_info[index].site
 		});
 	},
+
 
   /**
    * 添加到书架
@@ -110,7 +111,7 @@ Page({
 		}else{
 			var mybooks = this.data.mybooks;
 			var need_add_book = {
-				book_id: this.data.book_info._id,
+				book_id: this.data.book_info.book_id,
 				source_id: this.data.source_id,
 				reading_chapter: 0,
 				reading_process: 0
@@ -139,6 +140,7 @@ Page({
 			}
 		}
 	},
+
 
   /**
    * 移出书架
@@ -190,6 +192,7 @@ Page({
 		// });
 	},
 
+
   /**
    * 开始阅读
    */
@@ -201,10 +204,11 @@ Page({
 			});
 		}else{
 			wx.navigateTo({
-				url: "/pages/read/read?source_id="+this.data.source_id+"&book_id="+this.data.book_info._id
+				url: "/pages/read/read?source_id="+this.data.source_id+"&book_id="+this.data.book_info.book_id
 			});
 		}
 	},
+
 
   /**
    * 是否在我的书架
@@ -220,12 +224,15 @@ Page({
 	},
 
 
+  /**
+   * 获取资源index
+   */
 	indexOfSource: function(arr, value){
 		var len = arr.length;
 	    for(var i = 0; i < len; i++){
-	        if(value === arr[i]._id){
-	            return i;
-	        }
+        if (value === arr[i].site){
+            return i;
+        }
 	    }
 	    return -1;
 	}

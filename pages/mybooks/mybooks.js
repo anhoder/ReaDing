@@ -7,45 +7,54 @@
 * @Last Modified time: 2018-02-25 19:07:09
 * @Comment:
 */
+import BookRequest from '../../requests/BookRequest.js';
 
 var app = getApp();
+var bookRequest = new BookRequest();
+
 Page({
 
   data: {
     no_book_tips: "",
-    mybooks: {},
-    books_info: new Array(),
+    mybooks: [],
+    books_info: [],
     bookWidth: 150,
     startX: 0,
     remove_index: -1,
-    left: "0rpx"
+    left: "0rpx",
+    user: {}
+  },
+
+  onLoad: function () {
+    var user = wx.getStorageSync('user');
+    var mybooks = wx.getStorageSync('mybooks');
+    this.setData({ user, mybooks });
+    this.loading();
+    console.log(123);
   },
 
   onShow: function(){
-    this.resetData();
-    this.loading();
+    var mybooks = wx.getStorageSync('mybooks');
+    console.log(mybooks, this.data.mybooks, mybooks.length != this.data.mybooks.length);
+    if (mybooks.length != this.data.mybooks.length) {
+      this.resetData();
+      this.setData({ mybooks: mybooks ? mybooks : [] });
+      this.loading();
+    }
   },
+
   loading: function(){
     wx.showLoading({
       "title": "加载中...",
       "duration": 20000
     });
-
-    try {
-      var mybooks = wx.getStorageSync("mybooks");
-      if(mybooks){
-        this.setData({
-          mybooks: mybooks
-        });
-      }
-    }catch(e){
-      wx.showToast({
-        title: "未知错误，稍后再试",
-        icon: "none"
-      });
-    }
     this.getAllBookInfo();
   },
+
+
+  /**
+   * 获取所有书籍信息
+   */
   getAllBookInfo: function(){
     var that = this;
     var books = this.data.mybooks;
@@ -60,36 +69,34 @@ Page({
       wx.hideLoading();
     }
   },
+
+  /**
+   * 获取书籍信息
+   */
   getBookInfo: function(book_id, source_id){
     var that = this;
-    var url = app.globalData.config.book.book_info+"/"+book_id;
-    wx.request({
-      url: url,
-      success: function(res){
+    bookRequest.getBookInfo(book_id, this.data.user, res => {
+        if (res.data.code != 1) {
+          wx.showModal({title: res.msg});
+          return;
+        }
         var books_info = that.data.books_info;
-        var book_info = res.data;
+        var book_info = res.data.data;
         book_info.source_id = source_id;
         books_info.push(book_info);
         that.setData({
           books_info: books_info
         });
         wx.hideLoading();
-        // console.log(books_info);
-      },
-      fail: function(){
-        wx.showToast({
-          title: "无网络状态",
-          icon: "none"
+      }, () => {
+        wx.showModal({
+          title: "网络错误，请稍后再试"
         });
       }
-    });
+    );
   },
-  onHide: function(){
-    this.setData({
-      mybooks: {},
-      books_info: new Array()
-    });
-  },
+
+
   touchS:function(e){
     // console.log(e);
     //判断是否只有一个触摸点
@@ -100,6 +107,8 @@ Page({
       });
     }
   },
+
+
   //触摸时触发，手指在屏幕上每移动一次，触发一次
   touchM:function(e){
     // console.log(e);
@@ -131,6 +140,8 @@ Page({
       });
     }
   },
+
+
   touchE:function(e){
     // console.log(e);
     var that = this
@@ -150,6 +161,11 @@ Page({
       });
     }
   },
+
+
+  /**
+   * 移除书籍
+   */
   removeBook: function(event){
     var that = this;
     wx.showModal({
@@ -194,6 +210,8 @@ Page({
       }
     });
   },
+
+
   isInMybooks: function(arr,value){
     var len = arr.length;
       for(var i = 0; i < len; i++){
@@ -203,11 +221,13 @@ Page({
       }
       return -1;
   },
+
+
   resetData: function(){
     this.setData({
       no_book_tips: "",
-      mybooks: {},
-      books_info: new Array(),
+      mybooks: [],
+      books_info: [],
       bookWidth: 150,
       startX: 0,
       remove_index: -1,

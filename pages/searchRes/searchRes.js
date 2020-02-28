@@ -95,6 +95,7 @@ Page({
 		var keyword_index = event.currentTarget.dataset.index;
 		var keyword = this.data.keywords[keyword_index];
 		this.setData({
+      search_result: [],
 			last_keyword: keyword
 		});
 		this.startSearch(keyword);
@@ -106,6 +107,7 @@ Page({
    */
 	search: function(){
 		var keyword = this.data.keyword;
+    this.setData({search_result: []});
 		if(keyword != "") {
 			this.startSearch(keyword);
 		}

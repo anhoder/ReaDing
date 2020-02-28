@@ -1,16 +1,16 @@
 <view>
 	<scroll-view scroll-y wx:if="{{books_info.length}}">
 		<view wx:for="{{books_info}}" wx:key="this" class=" enabled_left_move" style="left:{{remove_index==index?left:'0px'}};" bindtouchstart="touchS" bindtouchmove="touchM" bindtouchend="touchE" data-index="{{index}}">
-			<navigator url="/pages/read/read?book_id={{item._id}}&source_id={{item.source_id}}" class="book">
-				<image src="https://statics.zhuishushenqi.com{{item.cover}}" lazy-load/>
+			<navigator url="/pages/read/read?book_id={{item.book_id}}&source_id={{item.source_id}}" class="book">
+				<image src="{{item.image}}" lazy-load/>
 				<view class="book_info">
-					<text class="title">{{item.title}}</text>
-					<text class="author">作者：{{item.author}} | 类别：{{item.cat}}</text>
-					<text class="intro">简介：{{item.longIntro}}</text>
-					<view class="follower_outter">人气：<text class="follower_inner">{{item.latelyFollower}}</text></view>
+					<text class="title">{{item.name}}</text>
+					<text class="author">作者：{{item.author}} | 类别：{{item.ltype}} | {{item.stype}}</text>
+					<text class="intro">简介：{{item.remark}}</text>
+					<view class="follower_outter"><text class="follower_inner">{{item.last_chapter}}</text></view>
 				</view>
 			</navigator>
-			<view class="remove_book" data-book="{{item._id}}" catchtap="removeBook">删除</view>
+			<view class="remove_book" data-book="{{item.book_id}}" catchtap="removeBook">删除</view>
 		</view>
 	</scroll-view>
 	<view wx:else class="no_book_tips">{{no_book_tips}}</view>
