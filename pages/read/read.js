@@ -87,11 +87,6 @@ Page({
           that.data.book_chapters[reading_chapter].lists_id,
           sourceId
         );
-      }, () => {
-        wx.hideLoading();
-        wx.showModal({
-          title: "网络错误，请稍后再试"
-        });
       }
     );
 	},
@@ -147,12 +142,7 @@ Page({
             }
           });
         }
-      }, () => {
-				wx.hideLoading();
-				wx.showModal({
-					title: "网络错误，请稍后再试"
-				});
-			}
+      }
     );
 	},
 
@@ -163,7 +153,7 @@ Page({
 	isInMybooks: function(arr,value){
 		var len = arr.length;
 	    for(var i = 0; i < len; i++){
-	        if(value === arr[i].book_id){
+	        if(value == arr[i].book_id){
 	            return i;
 	        }
 	    }
@@ -206,11 +196,11 @@ Page({
   /**
    * 回调
    */
-	onUnload: function(){
+  onUnload: function(){
 		var mybooks = this.data.mybooks;
 		var index = this.isInMybooks(mybooks,this.data.book_id);
-
-		if(index != -1){
+    
+    if (index != -1) {
 			mybooks[index].reading_process = this.data.reading_process;
 			mybooks[index].reading_chapter = this.data.reading_chapter;
 			try{
@@ -354,11 +344,6 @@ Page({
           book_source_name: res.data.data.map(item => item.site_name),
 					index_source: index_source
 				});
-      }, () => {
-        wx.hideLoading();
-        wx.showModal({
-          title: "网络错误，请稍后再试"
-        });
       }
     );
 	},

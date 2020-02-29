@@ -7,59 +7,75 @@
 * @Last Modified time: 2018-02-25 10:48:49
 * @Comment:
 */
+import RankRequest from '../../requests/RankRequest.js';
 
 var app = getApp();
+var rankRequest = new RankRequest();
 
 Page({
   data:{
-  	rank_categories: {},
-  	show_rank_categories: {},
+  	rank_categories: [],
+    sex: 1, // 1男 2女
   	male_select: "male_select",
   	female_select: "",
-  	cover: "cover_male"
+  	cover: "cover_male",
+    user: {}
   },
+
+
   onLoad: function(){
   	wx.showLoading({
       "title": "加载中...",
       "duration": 20000
     });
-    this.getRank();
+    var user = wx.getStorageSync('user');
+    this.setData({user});
+    this.getRanks();
   },
-  getRank: function(){
+
+
+  /**
+   * 获取排行榜信息
+   */
+  getRanks: function(){
   	var that = this;
-  	var url = app.globalData.config.rank.rank_categories;
-  	wx.request({
-  		url: url,
-  		success: function(res){
-  			// console.log(res.data);
-  			that.setData({
-  				rank_categories: res.data,
-  				show_rank_categories: res.data.male
-  			});
-  			wx.hideLoading();
-  		},
-  		fail: function(){
-	        wx.hideLoading();
-	        wx.showModal({
-	          title: "网络错误，请稍后再试~"
-	        });
-	    }
-  	});
+    rankRequest.getRanks(this.data.sex, this.data.user, res => {
+        that.setData({
+          rank_categories: res.data.data.map(item => {item.title = item.name.split('.')[1];return item;})
+        });
+        wx.hideLoading();
+      }
+    );
   },
+
+
+  /**
+   * 切换到男生
+   */
   male_tap: function(){
-  	this.setData({
-  		male_select: "male_select",
-	  	female_select: "",
-	  	cover: "cover_male",
-	  	show_rank_categories: this.data.rank_categories.male
-  	});
+    if (this.data.sex != 1) {
+      this.setData({
+        male_select: "male_select",
+        female_select: "",
+        cover: "cover_male",
+        sex: 1
+      });
+      this.getRanks();
+    }
   },
+
+  /**
+   * 切换到女生
+   */
   female_tap: function(){
-  	this.setData({
-  		male_select: "",
-	  	female_select: "female_select",
-	  	cover: "cover_female",
-	  	show_rank_categories: this.data.rank_categories.female
-  	});
+    if (this.data.sex != 2) {
+      this.setData({
+        male_select: "",
+        female_select: "female_select",
+        cover: "cover_female",
+        sex: 2
+      });
+      this.getRanks();
+    }
   }
 })

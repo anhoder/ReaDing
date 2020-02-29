@@ -5,8 +5,8 @@
 		<view class="cover {{cover}}"></view>
 	</view>
 	<scroll-view class="rank_cate" scroll-y>
-		<navigator wx:for="{{show_rank_categories}}" wx:key="this" url="/pages/rankdetail/rankdetail?rank_id={{item._id}}" class="rank_item">
-			<image src="https://statics.zhuishushenqi.com{{item.cover}}" />
+		<navigator wx:for="{{rank_categories}}" wx:key="this" url="/pages/rankdetail/rankdetail?rank_id={{item.name}}&title={{item.title}}" class="rank_item">
+			<image src="{{item.icon}}" />
 			<view class="rank_title">{{item.title}}</view>
 		</navigator>
 	</scroll-view>

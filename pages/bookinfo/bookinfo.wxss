@@ -3,15 +3,15 @@
 	overflow-y: hidden;
 }
 .book_detail_box{
-	height: 35%;
+	height: 28%;
 	border-bottom: 1px solid #ccc;
 	box-shadow: 0 0 10px #000;
 }
 .book_detail_box image{
-	width: 252rpx;
-	height: 360rpx;
-	margin: 25rpx;
-  	box-shadow: 0 0 10px #000;
+	width: 210rpx;
+	height: 300rpx;
+	margin: 20rpx;
+  box-shadow: 0 0 5px #000;
 }
 .book_detail{
 	width: 55%;
@@ -52,6 +52,7 @@
 	display: block;
 	text-align: center;
 	color: #008B8B;
+  margin-top: 20rpx;
 }
 .rating_count{
 	font-size: 28rpx;
@@ -61,7 +62,7 @@
 }
 
 .other{
-	height: 55%;
+	height: 62%;
 }
 .other_title{
 	border-left:5px solid #008B8B;

@@ -7,73 +7,71 @@
 * @Last Modified time: 2018-02-25 18:07:13
 * @Comment:
 */
+import CategoryRequest from '../../requests/CategoryRequest.js';
 
 var app = getApp();
+var categoryRequest = new CategoryRequest();
+
 Page({
+
 	data: {
-		cate_detail: new Array(),
-		gender: "",
-		major: "",
-		minor: "",
+		cat_books: [],
+		sex: 1,
+		ltype: -1,
+		stype: -1,
+    page: 1,
+    user: {},
 		loading_style: "loading_hide"
 	},
+
+
 	onLoad: function(opt){
 		wx.showLoading({
 			"title": "加载中...",
 			"duration": 20000
 		});
-		var gender = opt.gender;
-		var major = opt.major;
-		var minor = opt.minor;
+    var user = wx.getStorageSync("user");
+    var ltype = opt.ltype;
+    var stype = opt.stype;
+    var sex = opt.sex;
 		wx.setNavigationBarTitle({
-			title: major+"　"+minor
+      title: opt.title
 		});
 		this.setData({
-			gender: gender,
-			major: major,
-			minor: minor
+      ltype,
+      stype,
+      sex,
+      user
 		});
-		var start = 0;
-		var limit = 10;
-		var type = "hot";
-		this.getCateDetail(gender, major, minor, type, start, limit);
+		this.getCateDetail();
 	},
-	getCateDetail: function(gender, major, minor, type, start, limit){
+
+
+  /**
+   * 获取分类详情
+   */
+	getCateDetail: function(){
 		var that = this;
-		var major = encodeURI(major);
-		var minor = encodeURI(minor);
-		var url = app.globalData.config.category.category_info+"?gender="+gender+"&type="+type+"&major="+major+"&minor="+minor+"&start="+start+"&limit="+limit;
-		// console.log(url);
-		wx.request({
-			url: url,
-			success: function(res){
-				var cate_detail = that.data.cate_detail;
-				cate_detail = cate_detail.concat(res.data.books);
-				that.setData({
-					cate_detail: cate_detail,
-					loading_style: "loading_hide"
-				});
-				// console.log(that.data.cate_detail);
-				wx.hideLoading();
-			},
-			fail: function(){
-				wx.hideLoading();
-				wx.showModal({
-					title: "网络错误，请稍后再试"
-				});
-			}
-		});
-	},
+    categoryRequest.getCategoryInfo(
+      this.data.sex, this.data.ltype, this.data.stype, 
+      this.data.page, this.data.user, res => {
+        that.setData({
+          cat_books: that.data.cat_books.concat(res.data.data.list),
+          loading_style: "loading_hide"
+        });
+        wx.hideLoading();
+      }
+    );
+  },
+
+  /**
+   * 更多
+   */
 	showMore: function(){
 		this.setData({
-			loading_style: "loading_show"
+			loading_style: "loading_show",
+      page: this.data.page + 1
 		});
-		var gender = this.data.gender;
-		var major = this.data.major;
-		var minor = this.data.minor;
-		var type = "hot";
-		var start = this.data.cate_detail.length;
-		var limit = 10;
-		this.getCateDetail(gender, major, minor, type, start, limit);
+		this.getCateDetail();
 	}
 })

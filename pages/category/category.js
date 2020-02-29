@@ -7,109 +7,117 @@
 * @Last Modified time: 2018-02-25 16:32:56
 * @Comment:
 */
+import CategoryRequest from '../../requests/CategoryRequest.js';
 
 var app = getApp();
+var categoryRequest = new CategoryRequest();
+
 Page({
+
+
 	data: {
 		male_select: "male_select",
-	  	female_select: "",
-	  	press_select: "",
-	  	cover: "cover_male",
-	  	cats_info: {},
-	  	show_cats: {},
-	  	sub_cats: {},
-	  	cat_name: "",
-	  	top: 0,
-	  	selected_gender: ""
+    female_select: "",
+    press_select: "",
+    cover: "cover_male",
+    cats_info: [],
+    ltype_id: 0,
+    sub_cats: [],
+    cat_name: "",
+    sex: 1, // 1男 2女
+    top: 0
 	},
+
+
 	onLoad: function(){
 		wx.showLoading({
-	      "title": "加载中...",
-	      "duration": 20000
-	    });
-	    this.getCats();
+      "title": "加载中...",
+      "duration": 20000
+    });
+    var user = wx.getStorageSync("user");
+    this.setData({user});
+    this.getCats();
 	},
+
+
+  /**
+   * 获取分类
+   */
 	getCats: function(){
 		var that = this;
-  		var url = app.globalData.config.category.sub_categories;
-	  	wx.request({
-	  		url: url,
-	  		success: function(res){
-	  			// console.log(res.data);
-	  			that.setData({
-	  				cats_info: res.data,
-	  				show_cats: res.data.male,
-	  				sub_cats: res.data.male[0].mins,
-	  				cat_name: res.data.male[0].major,
-	  				selected_gender: "male"
-	  			});
-	  			wx.hideLoading();
-	  		},
-	  		fail: function(){
-		        wx.hideLoading();
-		        wx.showModal({
-		          title: "网络错误，请稍后再试~"
-		        });
-		    }
-	  	});
+    categoryRequest.getCategories(this.data.sex, this.data.user, (res) => {
+      that.setData({
+        cats_info: res.data.data,
+        cat_name: res.data.data[0].ltype_name,
+        sub_cats: res.data.data[0].ltype_list,
+        ltype_id: res.data.data[0].ltype_id
+      });
+      wx.hideLoading();
+    });
 	},
+
+
+  /**
+   * 选择男生
+   */
 	male_tap: function(){
-	  	this.setData({
-	  		male_select: "male_select",
-		  	female_select: "",
-		  	press_select: "",
-		  	cover: "cover_male",
-		  	show_cats: this.data.cats_info.male,
-		  	cat_name: this.data.cats_info.male[0].major,
-		  	top: 0,
-			sub_cats: this.data.cats_info.male[0].mins,
-			selected_gender: "male"
-	  	});
+    if (this.data.sex != 1) {
+      this.setData({
+        male_select: "male_select",
+        female_select: "",
+        press_select: "",
+        cover: "cover_male",
+        top: 0,
+        sex: 1,
+      });
+      this.getCats();
+    }
 	},
+
+
+  /**
+   * 选择女生
+   */
 	female_tap: function(){
-	  	this.setData({
-	  		male_select: "",
-		  	female_select: "female_select",
-		  	press_select: "",
-		  	cover: "cover_female",
-		  	show_cats: this.data.cats_info.female,
-		  	cat_name: this.data.cats_info.female[0].major,
-		  	top: 0,
-			sub_cats: this.data.cats_info.female[0].mins,
-			selected_gender: "female"
-	  	});
+    if (this.data.sex != 2) {
+      this.setData({
+        male_select: "",
+        female_select: "female_select",
+        press_select: "",
+        cover: "cover_female",
+        top: 0,
+        sex: 2
+      });
+      this.getCats();
+    }
 	},
-	press_tap: function(){
-	  	this.setData({
-	  		male_select: "",
-		  	female_select: "",
-		  	press_select: "press_select",
-		  	cover: "cover_press",
-		  	show_cats: this.data.cats_info.press,
-		  	cat_name: this.data.cats_info.press[0].major,
-		  	top: 0,
-			sub_cats: this.data.cats_info.press[0].mins,
-			selected_gender: "press"
-	  	});
-	},
+
+
+  /**
+   * 二级分类
+   */
 	showSubCats:function(e){
 		var cat_index = e.target.dataset.index;
 		this.setData({
-			top: 100*cat_index,
-			cat_name: this.data.show_cats[cat_index].major,
-			sub_cats: this.data.show_cats[cat_index].mins
+			top: 100 * cat_index,
+			cat_name: this.data.cats_info[cat_index].ltype_name,
+      sub_cats: this.data.cats_info[cat_index].ltype_list,
+      ltype_id: this.data.cats_info[cat_index].ltype_id
 		});
 
 	},
+
+
+  /**
+   * 跳转到分类详情页
+   */
 	toCatInfo: function(e){
-		var gender = this.data.selected_gender;
-		var major = this.data.cat_name;
-		var minor = e.target.dataset.name;
-		// console.log(gender);
-		// console.log(major);
-		// console.log(minor);
+		var sex = this.data.sex;
+    var stype_id = e.target.dataset.id;
+    var ltype_id = this.data.ltype_id;
+    var type_name = this.data.cat_name + ' ' + e.target.dataset.name
 		wx.navigateTo({
-			  url: "/pages/catedetail/catedetail?gender="+gender+"&major="+major+"&minor="+minor
+      url: `/pages/catedetail/catedetail?sex=${sex}&ltype=${ltype_id}&stype=${stype_id}&title=${type_name}`
 		});
 	}
 })

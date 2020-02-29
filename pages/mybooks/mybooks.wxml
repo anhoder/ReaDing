@@ -1,13 +1,13 @@
 <view>
-	<scroll-view scroll-y wx:if="{{books_info.length}}">
-		<view wx:for="{{books_info}}" wx:key="this" class=" enabled_left_move" style="left:{{remove_index==index?left:'0px'}};" bindtouchstart="touchS" bindtouchmove="touchM" bindtouchend="touchE" data-index="{{index}}">
+	<scroll-view scroll-y wx:if="{{mybooks.length}}">
+		<view wx:for="{{mybooks}}" wx:key="this" class=" enabled_left_move" style="left:{{remove_index==index?left:'0px'}};" bindtouchstart="touchS" bindtouchmove="touchM" bindtouchend="touchE" data-index="{{index}}">
 			<navigator url="/pages/read/read?book_id={{item.book_id}}&source_id={{item.source_id}}" class="book">
-				<image src="{{item.image}}" lazy-load/>
+				<image src="{{item.book_info.image}}" lazy-load/>
 				<view class="book_info">
-					<text class="title">{{item.name}}</text>
-					<text class="author">作者：{{item.author}} | 类别：{{item.ltype}} | {{item.stype}}</text>
-					<text class="intro">简介：{{item.remark}}</text>
-					<view class="follower_outter"><text class="follower_inner">{{item.last_chapter}}</text></view>
+					<text class="title">{{item.book_info.name}}</text>
+					<text class="author">作者：{{item.book_info.author}} | 类别：{{item.book_info.ltype}}  {{item.book_info.stype}}</text>
+					<text class="intro">简介：{{item.book_info.remark}}</text>
+					<view class="follower_outter"><text class="follower_inner">{{item.book_info.last_chapter}}</text></view>
 				</view>
 			</navigator>
 			<view class="remove_book" data-book="{{item.book_id}}" catchtap="removeBook">删除</view>

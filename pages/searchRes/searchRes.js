@@ -60,11 +60,7 @@ Page({
           keywords: res.data.data,
           auto_complete_box: "auto_complete_box auto_complete_box_height"
         });
-      }, () => {
-        wx.hideLoading();
-        wx.showModal({ title: "网络错误，请稍后再试" });
-      }
-      );
+      });
     } else {
       indexRequest.getAutoComplete(key, { token: this.data.token, userId: this.data.userId }, res => {
         var words = res.data.data.map(item => item.name);
@@ -147,14 +143,6 @@ Page({
         that.setData({search_result: that.data.search_result.concat(res.data.data.list)});
         console.debug(res.data.data.list);
         wx.hideLoading();
-      }, () => {
-        wx.hideLoading();
-        that.setData({
-          result_tips: "网络错误，请稍后再试~"
-        });
-        wx.showModal({
-          title: "网络错误，请稍后再试~"
-        });
       }
     );
 	},

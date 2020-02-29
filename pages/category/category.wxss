@@ -21,21 +21,14 @@
 	flex: 1;
 	z-index: 1;
 }
-.press{
-	flex: 1;
-	z-index: 1;
-}
 .male_select{
 	color: white;
 }
 .female_select{
 	color: white;
 }
-.press_select{
-	color: white;
-}
 .cover{
-	width: 33.3%;
+	width: 50%;
 	height: 100%;
 	background: #008B8B;
 	position: absolute;
@@ -46,10 +39,7 @@
 	left: 0;
 }
 .cover_female{
-	left: 33.3%;
-}
-.cover_press{
-	left: 66.7%;
+	left: 50%;
 }
 .cat{
 	height: 90%;

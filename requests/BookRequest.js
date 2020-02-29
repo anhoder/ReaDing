@@ -7,10 +7,10 @@ class BookRequest extends BaseRequest {
   /**
    * 获取小说信息
    */
-  getBookInfo(bookId, user, success, fail) {
+  getBookInfo(bookId, user, success) {
     this.get(
       app.globalData.config.book.book_info + "?book_id=" + bookId,
-      user, success, fail
+      user, success
     );
   }
 

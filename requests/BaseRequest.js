@@ -22,28 +22,52 @@ class BaseRequest {
   /**
    * GET请求
    */
-  get(url, user, success, fail) {
+  get(url, user, success) {
     var that = this;
     wx.request({
       url,
       header: that.getHeader(user),
-      success,
-      fail
+      success: res => {
+        if (res.data.code != 1) {
+          wx.hideLoading();
+          wx.showModal({title: res.data.msg});
+          return;
+        }
+        success(res);
+      },
+      fail: () => {
+        wx.hideLoading();
+        wx.showModal({
+          title: "网络错误，请稍后再试"
+        });
+      }
     });
   }
 
   /**
    * POST请求
    */
-  post(url, data, user, success, fail) {
+  post(url, data, user, success) {
     var that = this;
     wx.request({
       url,
       data,
       header: that.getHeader(user),
       method: 'POST',
-      success,
-      fail
+      success: res => {
+        if (res.data.code != 1) {
+          wx.hideLoading();
+          wx.showModal({ title: res.data.msg });
+          return;
+        }
+        success(res);
+      },
+      fail: () => {
+        wx.hideLoading();
+        wx.showModal({
+          title: "网络错误，请稍后再试"
+        });
+      }
     });
   }
 };

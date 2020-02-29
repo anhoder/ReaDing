@@ -17,7 +17,6 @@ Page({
   data: {
     no_book_tips: "",
     mybooks: [],
-    books_info: [],
     bookWidth: 150,
     startX: 0,
     remove_index: -1,
@@ -26,49 +25,28 @@ Page({
   },
 
   onLoad: function () {
-    var user = wx.getStorageSync('user');
-    var mybooks = wx.getStorageSync('mybooks');
-    this.setData({ user, mybooks });
-    this.loading();
-    console.log(123);
-  },
-
-  onShow: function(){
-    var mybooks = wx.getStorageSync('mybooks');
-    console.log(mybooks, this.data.mybooks, mybooks.length != this.data.mybooks.length);
-    if (mybooks.length != this.data.mybooks.length) {
-      this.resetData();
-      this.setData({ mybooks: mybooks ? mybooks : [] });
-      this.loading();
-    }
-  },
-
-  loading: function(){
     wx.showLoading({
       "title": "加载中...",
       "duration": 20000
     });
-    this.getAllBookInfo();
+    var user = wx.getStorageSync('user');
+    var mybooks = wx.getStorageSync('mybooks');
+    if (mybooks.length > 0)
+      this.setData({ user, mybooks });
+    else 
+      this.setData({ no_book_tips: "去添加一本书吧~", mybooks: [], user});
+    wx.hideLoading();
   },
 
 
-  /**
-   * 获取所有书籍信息
-   */
-  getAllBookInfo: function(){
-    var that = this;
-    var books = this.data.mybooks;
-    if(books.length){
-      books.forEach(function(item, index){
-        that.getBookInfo(item.book_id, item.source_id);
-      });
-    }else {
-      that.setData({
-        no_book_tips: "去添加一本书吧~"
-      });
-      wx.hideLoading();
+  onShow: function(){
+    var mybooks = wx.getStorageSync('mybooks');
+    if (mybooks.length != this.data.mybooks.length) {
+      this.resetData();
+      this.setData({ mybooks: mybooks ? mybooks : [] });
     }
   },
+
 
   /**
    * 获取书籍信息
@@ -76,24 +54,15 @@ Page({
   getBookInfo: function(book_id, source_id){
     var that = this;
     bookRequest.getBookInfo(book_id, this.data.user, res => {
-        if (res.data.code != 1) {
-          wx.showModal({title: res.msg});
-          return;
-        }
-        var books_info = that.data.books_info;
-        var book_info = res.data.data;
-        book_info.source_id = source_id;
-        books_info.push(book_info);
-        that.setData({
-          books_info: books_info
-        });
-        wx.hideLoading();
-      }, () => {
-        wx.showModal({
-          title: "网络错误，请稍后再试"
-        });
-      }
-    );
+      var books_info = that.data.books_info;
+      var book_info = res.data.data;
+      book_info.source_id = source_id;
+      books_info.push(book_info);
+      that.setData({
+        books_info: books_info
+      });
+      wx.hideLoading();
+    });
   },
 
 
@@ -173,37 +142,36 @@ Page({
       content: '将会删除该书的阅读记录',
       success: function(res) {
         if(res.confirm){
-           var book_id = event.target.dataset.book;
-       try {
-           var mybooks = wx.getStorageSync("mybooks");
-         } catch (e) {
-           wx.showToast({
-             title: "未知错误，稍后再试",
-             icon: "none"
-           });
-         }
-       var index = that.isInMybooks(mybooks, book_id);
-       mybooks.splice(index, 1);
-       try{
-         wx.setStorageSync('mybooks', mybooks);
-       }catch(e){
-         wx.showToast({
-           title: "未知错误，稍后再试",
-           icon: "none"
-         });
-       }
-       that.setData({
-         mybooks: mybooks,
-         add_book_stat: "加入书架",
-         add_to_mybooks_style: "add_to_mybooks",
-         add_fun: "addToMybooks"
-       });
-       wx.showToast({
-         title: "已从书架移除",
-         icon: "none"
-       });
-       that.loading();
-       that.resetData();
+          var book_id = event.target.dataset.book;
+          try {
+            var mybooks = wx.getStorageSync("mybooks");
+          } catch (e) {
+            wx.showToast({
+              title: "未知错误，稍后再试",
+              icon: "none"
+            });
+          }
+          var index = that.isInMybooks(mybooks, book_id);
+          mybooks.splice(index, 1);
+          try{
+            wx.setStorageSync('mybooks', mybooks);
+          }catch(e){
+            wx.showToast({
+              title: "未知错误，稍后再试",
+              icon: "none"
+            });
+          }
+          that.setData({
+            mybooks: mybooks,
+            no_book_tips: mybooks.length > 0 ? "去添加一本书吧~" : '',
+            add_book_stat: "加入书架",
+            add_to_mybooks_style: "add_to_mybooks",
+            add_fun: "addToMybooks"
+          });
+          wx.showToast({
+            title: "已从书架移除",
+            icon: "none"
+          });
         }else if(res.cancel){
           
         }

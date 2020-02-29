@@ -13,7 +13,7 @@ var config = {
     // "sub_categories": "https:\/\/api.zhuishushenqi.com\/cats\/lv2",
     // "category_info": "https:\/\/api.zhuishushenqi.com\/book\/by-categories"
     "categories": "https:\/\/bc.xszsjc.com\/core\/book\/type.api",
-    "category_info": "https:\/\/bc.xszsjc.com\/core\/book\/type_info.api"
+    "category_info": "https:\/\/bc.xszsjc.com\/core\/book\/type_all.api"
   },
   "book": {
     // "book_info": "https:\/\/api.zhuishushenqi.com\/book",

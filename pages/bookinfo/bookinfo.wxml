@@ -3,10 +3,10 @@
 		<image src="{{book_info.image}}" lazy-load/>
 		<view class="book_detail">
 			<text class="book_title">{{book_info.name}}</text>
-			<view class="book_author_title">作者：<navigator url="/pages/authorbooks/authorbooks?author={{book_info.author}}" class="book_author">{{book_info.author}}</navigator></view>
+			<view class="book_author_title">作者：<navigator url="/pages/searchRes/searchRes?keyword={{book_info.author}}" class="book_author">{{book_info.author}}</navigator></view>
 			<text class="book_cate">类别：{{book_info.ltype}}　{{book_info.stype}}</text>
 			<view class="rating_title">喜欢人数：
-				<text class="rating_score" wx:if="{{book_info.rating.score}}">{{book_info.fav_num}}</text>
+				<text class="rating_score" wx:if="{{book_info.remark}}">{{book_info.fav_num}}</text>
 				<text wx:else>没人喜欢T^T</text>
 			</view>
 		</view>
@@ -14,7 +14,7 @@
 	<scroll-view class="other" scroll-y>
 		<view class="other_box">
 			<view class="other_title">简　介</view>
-			<view class="other_content" wx:if="{{book_info.longIntro}}">{{book_info.remark}}</view>
+			<view class="other_content" wx:if="{{book_info.remark}}">{{book_info.remark}}</view>
 			<view class="other_content" wx:else>暂无简介</view>
 		</view>
 		<view class="other_box">

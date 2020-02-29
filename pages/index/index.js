@@ -62,11 +62,6 @@ Page({
         that.getRandomBooks(2, 4);
         that.getBanner(4);
         if (that.data.request_flag == 4) wx.hideLoading();
-      }, () => {
-        wx.hideLoading();
-        wx.showModal({
-          title: "网络错误，请稍后再试"
-        });
       });
     } else {
       this.setData(user);
@@ -83,12 +78,9 @@ Page({
   getBanner: function (times) {
     var that = this;
     request.getBanner({token: this.data.token, userId: this.data.userId}, res => {
-        that.setData({ banner: res.data.data.banner, request_flag: ++that.data.request_flag });
-        if (that.data.request_flag >= times) wx.hideLoading();
-      }, () => {
-        wx.hideLoading();
-        wx.showModal({title: "网络错误，请稍后再试"});
-      });
+      that.setData({ banner: res.data.data.banner, request_flag: ++that.data.request_flag });
+      if (that.data.request_flag >= times) wx.hideLoading();
+    });
   },
 
 
@@ -124,9 +116,6 @@ Page({
           that.setData(data);
         }
         if (that.data.request_flag >= times) wx.hideLoading();
-      }, () => {
-        wx.hideLoading();
-        wx.showModal({title: "网络错误，请稍后再试"});
       }
     );
   },
@@ -159,9 +148,6 @@ Page({
             keywords: res.data.data,
             auto_complete_box: "auto_complete_box auto_complete_box_height"
           });
-        }, () => {
-          wx.hideLoading();
-          wx.showModal({title: "网络错误，请稍后再试"});
         }
       );
 		} else {
@@ -178,9 +164,6 @@ Page({
               auto_complete_box: "auto_complete_box"
             });
           }
-        }, () => {
-          wx.hideLoading();
-          wx.showModal({ title: "网络错误，请稍后再试" });
         }
       );
     }

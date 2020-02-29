@@ -41,22 +41,16 @@ Page({
     this.setData({token: userInfo.token, userId: userInfo.userId});
 
     bookRequest.getBookInfo(bookId, userInfo, res => {
-        that.setData({
-          book_info: res.data.data,
-          book_source_info: res.data.data.sites,
-          author_books: res.data.data.author_book_list,
-          book_reviews: res.data.data.comment_info_list,
-          get_data_flag: that.data.get_data_flag + 1
-        });
-        this.getMyBooks();
-		    if(this.data.get_data_flag == 2) wx.hideLoading();
-      }, () => {
-        wx.hideLoading();
-        wx.showModal({
-          title: "网络错误，请稍后再试"
-        });
-      } 
-    );
+      that.setData({
+        book_info: res.data.data,
+        book_source_info: res.data.data.sites,
+        author_books: res.data.data.author_book_list,
+        book_reviews: res.data.data.comment_info_list,
+        get_data_flag: that.data.get_data_flag + 1
+      });
+      this.getMyBooks();
+      if(this.data.get_data_flag == 2) wx.hideLoading();
+    });
 	},
 
 
@@ -113,6 +107,15 @@ Page({
 			var need_add_book = {
 				book_id: this.data.book_info.book_id,
 				source_id: this.data.source_id,
+        book_info: {
+          name: this.data.book_info.name,
+          image: this.data.book_info.image,
+          author: this.data.book_info.author,
+          ltype: this.data.book_info.ltype,
+          stype: this.data.book_info.stype,
+          remark: this.data.book_info.remark,
+          last_chapter: this.data.book_info.last_chapter
+        },
 				reading_chapter: 0,
 				reading_process: 0
 			};
