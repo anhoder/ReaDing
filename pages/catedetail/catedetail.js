@@ -20,8 +20,7 @@ Page({
 		ltype: -1,
 		stype: -1,
     page: 1,
-    user: {},
-		loading_style: "loading_hide"
+    user: {}
 	},
 
 
@@ -57,7 +56,6 @@ Page({
       this.data.page, this.data.user, res => {
         that.setData({
           cat_books: that.data.cat_books.concat(res.data.data.list),
-          loading_style: "loading_hide"
         });
         wx.hideLoading();
       }
@@ -69,7 +67,6 @@ Page({
    */
 	showMore: function(){
 		this.setData({
-			loading_style: "loading_show",
       page: this.data.page + 1
 		});
 		this.getCateDetail();

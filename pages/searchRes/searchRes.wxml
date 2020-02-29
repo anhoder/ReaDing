@@ -17,6 +17,7 @@
 				<view class="follower_outter"><text class="follower_inner">{{item.last_chapter}}</text></view>
 			</view>
 		</navigator>
+		<view class="loading">加载中...</view>
 	</scroll-view>
 	<view class="no_result" wx:else >{{result_tips}}</view>
 </view>

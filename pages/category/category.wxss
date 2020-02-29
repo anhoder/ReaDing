@@ -3,7 +3,7 @@
 	overflow: hidden;
 }
 .sex_choose{
-	height: 10%;
+	height: 8%;
 	display: flex;
 	text-align: center;
 	line-height: 110rpx;
@@ -42,7 +42,7 @@
 	left: 50%;
 }
 .cat{
-	height: 90%;
+	height: 92%;
 	position: relative;
 	display: flex;
 }
