@@ -1,13 +1,13 @@
 # 阅鼑微信小程序
 
-![GitHub repo size](https://img.shields.io/github/repo-size/AlanAlbert/ReaDing)
-![Last Tag](https://badgen.net/github/tag/AlanAlbert/ReaDing)
-![GitHub last commit](https://badgen.net/github/last-commit/AlanAlbert/ReaDing)
-![GitHub](https://img.shields.io/github/license/AlanAlbert/ReaDing)
+![GitHub repo size](https://img.shields.io/github/repo-size/anhoder/ReaDing)
+![Last Tag](https://badgen.net/github/tag/anhoder/ReaDing)
+![GitHub last commit](https://badgen.net/github/last-commit/anhoder/ReaDing)
+![GitHub](https://img.shields.io/github/license/anhoder/ReaDing)
 
 
-![GitHub stars](https://img.shields.io/github/stars/AlanAlbert/ReaDing?style=social)
-![GitHub forks](https://img.shields.io/github/forks/AlanAlbert/ReaDing?style=social)
+![GitHub stars](https://img.shields.io/github/stars/anhoder/ReaDing?style=social)
+![GitHub forks](https://img.shields.io/github/forks/anhoder/ReaDing?style=social)
 
 小说阅读小程序（**仅用于学习**），原使用追书神器的接口，现在**已经换成了其他免费阅读的接口**。
 
